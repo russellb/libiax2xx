@@ -1,0 +1,64 @@
+#
+# Asterisk -- A telephony toolkit for Linux.
+# 
+# Makefile rules
+#
+# Copyright (C) 2006, Digium, Inc.
+#
+# Kevin P. Fleming <kpfleming@digium.com>
+#
+# This program is free software, distributed under the terms of
+# the GNU General Public License
+#
+
+# Each command is preceded by a short comment on what to do.
+# Prefixing one or the other with @\# or @ or nothing makes the desired
+# behaviour. ECHO_PREFIX prefixes the comment, CMD_PREFIX prefixes the command.
+
+ifeq ($(V),)
+   ECHO_PREFIX=@
+   CMD_PREFIX=@
+else
+   ECHO_PREFIX=@\# 
+   CMD_PREFIX=
+endif
+
+
+define ast_make_o_c
+$(1): $(2)
+	$(ECHO_PREFIX) echo "   [CC] $$< -> $$@"
+	$(CMD_PREFIX) $$(CC) -o $$@ -c $$< $$(CFLAGS)
+endef
+
+define ast_make_o_cxx
+$(1): $(2)
+	$(ECHO_PREFIX) echo "   [CXX] $$< -> $$@"
+	$(CMD_PREFIX) $$(CXX) -o $$@ -c $$< $$(CXXFLAGS)
+endef
+
+define ast_make_a_o
+$(1): $(2)
+	$(ECHO_PREFIX) echo "   [AR] $$^ -> $$@"
+	$(CMD_PREFIX) $$(AR) cr $$@ $$^
+	$(CMD_PREFIX) $$(RANLIB) $$@
+endef
+
+define ast_make_final
+$(1): $(2)
+	$(ECHO_PREFIX) echo "   [LD] $$^ -> $$@"
+	$(CMD_PREFIX) $$(CXX) -o $$@ $$(LDFLAGS) $$^ $$(LIBS)
+endef
+
+define ast_make_final_host
+$(1): $(2)
+	$(ECHO_PREFIX) echo "   [LD] $$^ -> $$@"
+	$(CMD_PREFIX) $$(HOST_CC) $$(STATIC_BUILD) -o $$@ $$(CFLAGS) $$(LDFLAGS) $$^ $$(LIBS)
+endef
+
+$(eval $(call ast_make_o_c,%.o,%.c))
+
+$(eval $(call ast_make_oo_cc,%.oo,%.cc))
+
+$(eval $(call ast_make_so_o,%.so,%.o))
+
+$(eval $(call ast_make_final,%,%.o))

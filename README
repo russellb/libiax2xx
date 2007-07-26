@@ -1,0 +1,8 @@
+LibIAX2xx -- IAX2 in C++
+Copyright (C) 2006-2007, Russell Bryant
+Russell Bryant <russell@russellbryant.net>
+--------------------------------------------------------------
+
+Most of this code is something I wrote for a school project.  I mostly
+implemented the pieces needed for the project, but hope that it will continue
+to be useful for some other things in the future ...
