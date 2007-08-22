@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Generate a bunch of PING frames which will cause INVAL responses
+# since they are sent as a part of a non-existent call
+
+PATH=./:$PATH
+
+if [ "x$1" = "x" ]
+then
+	echo "USAGE: inval <ipaddr[:port]>"
+	exit 1
+fi
+
+DESTIP=$1
+
+CALLNUM=1
+while test $CALLNUM -lt 100
+do
+	iaxpacket -f FULL -t IAX2 -s PING -S ${CALLNUM} -i ${DESTIP}
+	CALLNUM=$[$CALLNUM + 1]
+done
