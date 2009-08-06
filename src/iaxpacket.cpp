@@ -218,22 +218,22 @@ static int parse_args(int argc, char *argv[], iax2_frame &frame,
 			val = buf;
 			ie = strsep(&val, "=");
 			if (!ie || !val) {
-				fprintf(stderr, "'%s' is not a valid arg to --ie_string\n");
+				fprintf(stderr, "'%s' is not a valid arg to --ie_string\n", optarg);
 				exit(1);
 			}
 			if (ch == 'R')
 				frame.add_ie_string(ie, val);
 			else if (ch == 'l') {
 				uint32_t ie_val;
-				if (sscanf(val, "%lu", &ie_val) != 1) {
-					fprintf(stderr, "'%s' is not a valid arg to --ie_ulong\n");
+				if (sscanf(val, "%u", &ie_val) != 1) {
+					fprintf(stderr, "'%s' is not a valid arg to --ie_ulong\n", val);
 					exit(1);
 				}
 				frame.add_ie_unsigned_long(ie, ie_val);
 			} else if (ch == 'o') {
 				uint16_t ie_val;
-				if (sscanf(val, "%u", &ie_val) != 1) {
-					fprintf(stderr, "'%s' is not a valid arg to --ie_ushort\n");
+				if (sscanf(val, "%hu", &ie_val) != 1) {
+					fprintf(stderr, "'%s' is not a valid arg to --ie_ushort\n", val);
 					exit(1);
 				}
 				frame.add_ie_unsigned_short(ie, ie_val);
