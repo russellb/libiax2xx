@@ -290,7 +290,11 @@ enum iax2_ie_type {
 	/*! Dropped frames (presumably by jitterbuffer) */
 	IAX2_IE_RR_DROPPED      = 0x32,
 	/*! Frames received Out of Order */
-	IAX2_IE_RR_OOO          = 0X33,
+	IAX2_IE_RR_OOO          = 0x33,
+	/*! Variable */
+	IAX2_IE_VARIABLE        = 0x34,
+	/*! OSP Token */
+	IAX2_IE_OSPTOKEN        = 0x35,
 };
 
 /*!
