@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007, Russell Bryant <russell@russellbryant.net> 
+ * Copyright (C) 2007, Russell Bryant <russell@russellbryant.net>
  *
  * This file is part of LibIAX2xx.
  *
@@ -141,7 +141,7 @@ static void handle_ip_opt(struct sockaddr_in &remote_addr, const char *val)
 		remote_addr.sin_port = htons((uint16_t) atoi(port));
 }
 
-static int parse_args(int argc, char *argv[], iax2_frame &frame, 
+static int parse_args(int argc, char *argv[], iax2_frame &frame,
 	struct sockaddr_in &local_addr, struct sockaddr_in &remote_addr)
 {
 	static const struct option long_opts[] = {
@@ -150,6 +150,7 @@ static int parse_args(int argc, char *argv[], iax2_frame &frame,
 		{ "ie_string",       required_argument, NULL, 'R' },
 		{ "ie_ushort",       required_argument, NULL, 'o' },
 		{ "ie_ulong",        required_argument, NULL, 'l' },
+		{ "ie_empty",        required_argument, NULL, 'e' },
 		{ "in_seq_num",      required_argument, NULL, 'I' },
 		{ "ip",              required_argument, NULL, 'i' },
 		{ "out_seq_num",     required_argument, NULL, 'O' },
@@ -238,13 +239,16 @@ static int parse_args(int argc, char *argv[], iax2_frame &frame,
 				}
 				frame.add_ie_unsigned_short(ie, ie_val);
 			}
+			break;
 		}
+		case 'e':
+			frame.add_ie_empty(optarg);
 			break;
 		case 's':
 			FRAME_ARG_STR(subclass);
 			break;
 		case 'S':
-			FRAME_ARG_UINT(source_call_num);	
+			FRAME_ARG_UINT(source_call_num);
 			break;
 		case 't':
 			FRAME_ARG_STR(type);
@@ -294,15 +298,15 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-    if ((sockfd = socket(PF_INET, SOCK_DGRAM, 0)) == -1) {
-        fprintf(stderr, "Unable to create socket: %s\n", strerror(errno));
-        exit(1);
-    }
+	if ((sockfd = socket(PF_INET, SOCK_DGRAM, 0)) == -1) {
+		fprintf(stderr, "Unable to create socket: %s\n", strerror(errno));
+		exit(1);
+	}
 
-    if (bind(sockfd, (struct sockaddr *) &local_addr, sizeof(local_addr))) {
-        fprintf(stderr, "Unable to bind socket to port '%d': %s\n", ntohs(local_addr.sin_port), strerror(errno));
-        exit(1);
-    }	
+	if (bind(sockfd, (struct sockaddr *) &local_addr, sizeof(local_addr))) {
+		fprintf(stderr, "Unable to bind socket to port '%d': %s\n", ntohs(local_addr.sin_port), strerror(errno));
+		exit(1);
+	}
 
 	if (frame.send(&remote_addr, sockfd)) {
 		fprintf(stderr, "Error sending packet!\n");

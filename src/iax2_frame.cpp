@@ -548,7 +548,9 @@ iax2_frame &iax2_frame::add_ie(enum iax2_ie_type type, const void *data, unsigne
 
 	ie->type = type;
 	ie->datalen = datalen;
-	memcpy(ie->data, data, (size_t) datalen);
+	if (data && datalen) {
+		memcpy(ie->data, data, (size_t) datalen);
+	}
 
 	ies.push_back(ie);
 
@@ -572,6 +574,11 @@ iax2_frame &iax2_frame::add_ie_unsigned_long(enum iax2_ie_type type, u_int32_t n
 	num = htonl(num);
 
 	return add_ie(type, (void *) &num, (unsigned char) sizeof(num));
+}
+
+iax2_frame &iax2_frame::add_ie_empty(enum iax2_ie_type type)
+{
+	return add_ie(type, NULL, 0);
 }
 
 static int ie_val(const char *type)
@@ -627,6 +634,8 @@ static int ie_val(const char *type)
 	else if (!strcasecmp(type, "RR_DELAY")) return IAX2_IE_RR_DELAY;
 	else if (!strcasecmp(type, "RR_DROPPED")) return IAX2_IE_RR_DROPPED;
 	else if (!strcasecmp(type, "RR_OOO")) return IAX2_IE_RR_OOO;
+	else if (!strcasecmp(type, "VARIABLE")) return IAX2_IE_VARIABLE;
+	else if (!strcasecmp(type, "OSPTOKEN")) return IAX2_IE_OSPTOKEN;
 	else
 		return -1;
 
@@ -663,6 +672,18 @@ int iax2_frame::add_ie_unsigned_long(const char *type, uint32_t num)
 		return -1;
 
 	add_ie_unsigned_long((enum iax2_ie_type) res, num);
+}
+
+int iax2_frame::add_ie_empty(const char *type)
+{
+	int res;
+
+	if ((res = ie_val(type)) == -1) {
+		fprintf(stderr, "Invalid IE type '%s'\n", type);
+		return -1;
+	}
+
+	add_ie_empty((enum iax2_ie_type) res);
 }
 
 const char *iax2_frame::get_ie_string(enum iax2_ie_type type) const

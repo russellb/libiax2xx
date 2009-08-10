@@ -492,6 +492,19 @@ public:
 	int add_ie_unsigned_long(const char *type, uint32_t num);
 
 	/*!
+	 * \brief Add an information element that contains nothing
+	 *
+	 * \param type the type of IAX2 information Element
+	 *
+	 * \retval 0 Success
+	 * \retval non-zero Failure
+	 *
+	 * \note Information Elements are only valid for Full Frames of type IAX2
+	 */
+	iax2_frame &add_ie_empty(enum iax2_ie_type type);
+	int add_ie_empty(const char *type);
+
+	/*!
 	 * \brief Get an information element of the given type with a string
 	 *
 	 * \param type the information element type to retrieve from this frame
