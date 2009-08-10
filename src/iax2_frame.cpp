@@ -327,6 +327,8 @@ const char *iax2_ie::type2str(void) const
 	ST(IAX2_IE_RR_DELAY)
 	ST(IAX2_IE_RR_DROPPED)
 	ST(IAX2_IE_RR_OOO)
+	ST(IAX2_IE_VARIABLE)
+	ST(IAX2_IE_OSPTOKEN)
 	default:
 		fprintf(stderr, "Unknown IE type '%u'\n", type);
 		str = "Unknown";
