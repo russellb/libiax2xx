@@ -15,7 +15,7 @@ DESTIP=$1
 
 COUNT=1
 
-while test $COUNT < 32500
+while test $COUNT -lt 32500
 do
 	iaxpacket -f FULL -t IAX2 -s NEW -S $COUNT --ie_string USERNAME=guest -i ${DESTIP} --ie_ulong CAPABILITIES=4 --ie_ulong FORMAT=4
 	COUNT=$[$COUNT + 1]
